@@ -56,10 +56,10 @@
       success: function(todos){
         for(let i = 0; i < todos.length; i++){
           $('#todo').append(`
-            <tr>
+            <tr class="${todos[i]._id}">
             <td>${todos[i]._id}</td>
             <td>${todos[i].name}</td>
-            <td>${todos[i].isComplete}</td>
+            <td id="${todos[i]._id}">${todos[i].isComplete}</td>
             <td><a href="#" onclick="complete('${todos[i]._id}')" class="btn-floating btn-large waves-effect waves-light green"><i class="material-icons">thumb_up</i></a></td>
             <td><a href="#" onclick="uncomplete('${todos[i]._id}')" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">thumb_down</i></a></td></td>
             <td><a href="#" onclick="del('${todos[i]._id}')" class="btn-floating btn-large waves-effect waves-light brown"><i class="material-icons">delete</i></a></td></td>
@@ -78,10 +78,10 @@
         },
         success: function (todo) {
           $('#todo').append(`
-            <tr>
+            <tr class="${todo._id}">
             <td>${todo._id}</td>
             <td>${todo.name}</td>
-            <td>${todo.isComplete}</td>
+            <td id="${todo._id}">${todo.isComplete}</td>
             <td><a href="#" onclick="complete('${todo._id}')" class="btn-floating btn-large waves-effect waves-light green"><i class="material-icons">thumb_up</i></a></td>
             <td><a href="#" onclick="uncomplete('${todo._id}')" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">thumb_down</i></a></td></td>
             <td><a href="#" onclick="del('${todo._id}')" class="btn-floating btn-large waves-effect waves-light brown"><i class="material-icons">delete</i></a></td></td>
@@ -97,7 +97,7 @@
         type: 'PUT',
         success: function(todo){
           console.log("Completed!");
-          location.reload(true)
+          $(`#${id}`).html("true")
         }
       })
     }
@@ -108,7 +108,7 @@
         type: 'PUT',
         success: function(todo){
           console.log("Uncompleted!");
-          location.reload(true)
+          $(`#${id}`).html("false")
         }
       })
     }
@@ -119,7 +119,7 @@
         type: 'DELETE',
         success: function(todo){
           console.log("Deleted!");
-          location.reload(true)
+          $(`.${id}`).remove()
         }
       })
     }
