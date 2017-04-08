@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.js"
+    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+    crossorigin="anonymous"></script>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title></title>
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="row">
+        <form class="col s12">
+          <div class="row">
+            <h1><marquee WIDTH="50%" behavior="alternate">TODO LIST</marquee></h1>
+              <div class="input-field col s6">
+                <input id="addTodo" type="text" class="validate">
+                <label for="addTodo">Input your New Todo here</label>
+                <a class="btn-floating btn-large waves-effect waves-light red" onclick="addTodo()"><i class="material-icons">add</i></a>
+                <br><br>
+              </div>
+          </div>
+        </form>
+
+        <table id="todo">
+          <thead>
+            <tr>
+              <th>todo._id</th>
+              <th>todo</th>
+              <th>status</th>
+              <th>completed</th>
+              <th>uncomplete</th>
+              <th>delete</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+
+    $.ajax({
+      url: 'http://127.0.0.1:3000/todo',
+      type: 'GET',
+      success: function(todos){
+        for(let i = 0; i < todos.length; i++){
+          $('#todo').append(`
+            <tr>
+            <td>${todos[i]._id}</td>
+            <td>${todos[i].name}</td>
+            <td>${todos[i].isComplete}</td>
+            <td><a href="#" onclick="complete('${todos[i]._id}')" class="btn-floating btn-large waves-effect waves-light green"><i class="material-icons">thumb_up</i></a></td>
+            <td><a href="#" onclick="uncomplete('${todos[i]._id}')" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">thumb_down</i></a></td></td>
+            <td><a href="#" onclick="del('${todos[i]._id}')" class="btn-floating btn-large waves-effect waves-light brown"><i class="material-icons">delete</i></a></td></td>
+            </tr>
+          `)
+        }
+      }
+    })
+
+    function addTodo() {
+      $.ajax({
+        url: 'http://127.0.0.1:3000/todo/',
+        type: 'POST',
+        data: {
+          name: $('#addTodo').val(),
+        },
+        success: function (todo) {
+          $('#todo').append(`
+            <tr>
+            <td>${todo._id}</td>
+            <td>${todo.name}</td>
+            <td>${todo.isComplete}</td>
+            <td><a href="#" onclick="complete('${todo._id}')" class="btn-floating btn-large waves-effect waves-light green"><i class="material-icons">thumb_up</i></a></td>
+            <td><a href="#" onclick="uncomplete('${todo._id}')" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">thumb_down</i></a></td></td>
+            <td><a href="#" onclick="del('${todo._id}')" class="btn-floating btn-large waves-effect waves-light brown"><i class="material-icons">delete</i></a></td></td>
+            </tr>
+          `)
+        }
+      })
+    }
+
+    function complete(id){
+      $.ajax({
+        url: `http://127.0.0.1:3000/todo/complete/${id}`,
+        type: 'PUT',
+        success: function(todo){
+          console.log("Completed!");
+          location.reload(true)
+        }
+      })
+    }
+
+    function uncomplete(id){
+      $.ajax({
+        url: `http://127.0.0.1:3000/todo/uncomplete/${id}`,
+        type: 'PUT',
+        success: function(todo){
+          console.log("Uncompleted!");
+          location.reload(true)
+        }
+      })
+    }
+
+    function del(id){
+      $.ajax({
+        url: `http://127.0.0.1:3000/todo/del/${id}`,
+        type: 'DELETE',
+        success: function(todo){
+          console.log("Deleted!");
+          location.reload(true)
+        }
+      })
+    }
+
+  </script>
+
+</html>
