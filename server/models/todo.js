@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 let todoSchema = new Schema ({
   name : {
     type: String,
-    required: true['date is required']
+    required: [true, 'todo name is required']
   },
   isComplete : {
     type: Boolean,
